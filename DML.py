@@ -57,6 +57,6 @@ def db_select(data,field):
     WHERE {}={}""".format(field,data)
 
     cur.execute(sql)
-    data=cur.fetchone()
+    data=cur.fetchall()
     con.close()
     return data

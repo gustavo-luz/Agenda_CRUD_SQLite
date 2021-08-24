@@ -17,11 +17,11 @@ def commit_close(func):
 
 #create insert
 @commit_close
-def db_insert(name,email,twitter,facebook):
+def db_insert(name,phone,email,twitter,instagram):
     return """
-    INSERT INTO users (name,email,twitter,facebook)
-    VALUES('{}', '{}', '{}', '{}')
-    """.format(name,email,twitter,facebook)
+    INSERT INTO users (name,phone,email,twitter,instagram)
+    VALUES('{}', '{}', '{}', '{}', '{}')
+    """.format(name,phone,email,twitter,instagram)
 
 
 #update TODO update based on dif where's
@@ -52,7 +52,7 @@ def db_delete(name):
 def db_select(data,field):
     con=sqlite3.connect('agenda.db')
     cur=con.cursor()
-    sql= """SELECT id, name, email, twitter, facebook
+    sql= """SELECT id, name, phone, email, twitter, instagram
     FROM users
     WHERE {}={}""".format(field,data)
 

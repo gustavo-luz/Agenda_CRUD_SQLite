@@ -67,7 +67,7 @@ while option:
     """)
     option=input("Escolha uma opção do Menu ")
 
-
+#TODO criar opção de cadastrar mais de um contato, pedir o input do numero e repertir os pedidos de input quantas vezes precisar
     if option=="1":
         nome=input("Informe o nome ")
         telefone=input("Informe o telefone ")

@@ -41,12 +41,12 @@ def db_delete(name):
 
 #read
 #read consulta individual
-def db_select(data,field):
+def db_select(name):
     con=sqlite3.connect('agenda.db')
     cur=con.cursor()
-    sql= """SELECT id, name, phone, email, twitter, instagram
+    sql= """SELECT *
     FROM users
-    WHERE {}={}""".format(field,data)
+    WHERE name='{}'""".format(name)
 
     cur.execute(sql)
     data=cur.fetchall()
@@ -99,7 +99,7 @@ while option:
     elif option=="2":
         nome=input("Qual nome deseja encontrar? ")
         #TODO arrumar a consulta pra não ter que ser o id
-        consulta=(db_select('id',nome))
+        consulta=(db_select(nome))
         #TODO COLOCAR TABULAÇÃO DESTACANDO O PRINT E COM OS HEADERS
         print("\n Contato encontrado",consulta) 
 

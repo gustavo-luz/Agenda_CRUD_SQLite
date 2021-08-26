@@ -10,4 +10,4 @@ db_insert('andre','99999999','anda@gmail.com','adnsn','and')
 #pprint(db_select('id','3'))
 
 #TODO fix sqlite3.OperationalError: no such column: Gustavo
-pprint(db_select("twitter","cai"))
+#pprint(db_select("twitter","cai"))

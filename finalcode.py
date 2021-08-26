@@ -2,9 +2,40 @@
 import sqlite3
 from pprint import pprint
 
-# TODO INSERT DB CREATION (DDL)
 
-#função pra conectar na base, conectar o cursos e executar a função com os argumentos
+#conecta no banco e cria a tabela users
+def db_creation():
+    #conectar no banco
+    con = sqlite3.connect('agenda.db')
+    #cursor
+    cur = con.cursor()
+    #criar tabela
+    sql= """CREATE TABLE users (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        name text not null,
+        phone text not null,
+        email text not null,
+        twitter text not null,
+        instagram text not null);
+    """
+    cur.execute(sql)
+    #commita
+    con.commit()
+    #fecha
+    con.close()
+
+#deleta a tabela users do banco 
+def db_drop():
+    con = sqlite3.connect('agenda.db')
+    cur = con.cursor()
+    sql= """DROP TABLE users;"""
+    cur.execute(sql)
+    con.commit()
+    con.close()
+
+
+
+#função pra conectar na base, conectar o cursor e executar a função com os argumentos
 def commit_close(func):
     def decorator(*args):
         con=sqlite3.connect('agenda.db')
@@ -39,8 +70,8 @@ def db_delete(name):
     """.format(name)
 
 
-#read
-#read consulta individual
+#as consultas não utilizaram o commit_close, já que possuem um fetchall
+#read consulta individual por nome
 def db_select(name):
     con=sqlite3.connect('agenda.db')
     cur=con.cursor()
@@ -68,11 +99,15 @@ def db_select_all():
 
 
 if __name__ == '__main__':
+
+    #TODO adicionar opção de criar ou dropar o db
+    #db_creation()
+    #db_drop
+
     option=True
 
 while option:
     
-
     print ("""
     Menu:\n
     1. Inserir Contato
@@ -84,48 +119,56 @@ while option:
     """)
     option=input("Escolha uma opção do Menu: ")
 
-#TODO criar opção de cadastrar mais de um contato, pedir o input do numero e repertir os pedidos de input quantas vezes precisar
+
     if option=="1":
-        nome=input("Informe o nome: ")
-        telefone=input("Informe o telefone: ")
-        email=input("Informe o e-mail: ")
-        twitter=input("Informe a conta do twitter: ")
-        instagram=input("Informe a conta do instagram: ")
-        db_insert(nome,telefone,email,twitter,instagram)
-        #TODO COLOCAR TABULAÇÃO DESTACANDO O PRINT: https://www.educba.com/python-print-table/
-        print("\n Contato inserido:","nome:",nome,'\t',"telefone:",telefone,'\t',"email:",email,'\t',"twitter:",twitter,'\t',"instagram:",instagram) 
+        qtd_contatos=int(input("Quantos contatos deseja inserir?\n "))
+
+        n=0
+
+        while n < qtd_contatos:
+            print("Contato ",n+1)
+            nome=input("Informe o nome: ")
+            telefone=input("Informe o telefone: ")
+            email=input("Informe o e-mail: ")
+            twitter=input("Informe a conta do twitter: ")
+            instagram=input("Informe a conta do instagram: ")
+            db_insert(nome,telefone,email,twitter,instagram)
+            print("\n Contato inserido:")
+            print ("{:<8} {:<10} {:<14} {:<8} {:<8}".format('Nome','Telefone','E-mail','Twitter','Instagram'))
+            print ("{:<8} {:<10} {:<14} {:<8} {:<8}".format(nome,telefone,email,twitter,instagram))
+            n+=1
 
 
     elif option=="2":
         nome=input("Qual nome deseja encontrar? ")
-        #TODO arrumar a consulta pra não ter que ser o id
         consulta=(db_select(nome))
-        #TODO COLOCAR TABULAÇÃO DESTACANDO O PRINT E COM OS HEADERS
-        print("\n Contato encontrado",consulta) 
+        print("\n Retorno da Busca:")
+        print ("{:<5} {:<8} {:<10} {:<14} {:<8} {:<8}".format('ID','Nome','Telefone','E-mail','Twitter','Instagram'))
+        pprint(consulta) 
+        print("\n")
 
     elif option=="3":
         nome=input("Qual nome deseja remover? ")
         db_delete(nome)
-        #TODO COLOCAR TABULAÇÃO DESTACANDO O PRINT E COM OS HEADERS
-        print(nome,"removido(a) da agenda com sucesso") 
+        print("\n",nome,"removido(a) da agenda com sucesso\n") 
 
     elif option=="4":
         nome= input("Qual usuário deseja alterar? ")
         mail=input("Qual o novo email? ")
         db_update(nome,mail)
-        print("\n Contato Alterado") 
+        print("\n Contato Alterado\n") 
 
     elif option=="5":
         report=db_select_all()
         print("\n Relatório Gerado:")
-        #TODO COLOCAR TABULAÇÃO DESTACANDO O PRINT E COM OS HEADERS
+        print ("{:<5} {:<8} {:<10} {:<14} {:<8} {:<8}".format('ID','Nome','Telefone','E-mail','Twitter','Instagram'))
         pprint(report)
+        print("\n")
         
 
     elif option=="6":
-        
-        pprint("\n Até Logo")
+        print("\n Até Logo \n")
         break 
 
-    elif option !="":
-        print("\n Opção inválida, escolha outra opção") 
+    else:
+        print("\n Opção inválida, escolha outra opção\n") 

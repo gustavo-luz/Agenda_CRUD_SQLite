@@ -3,6 +3,10 @@ import sqlite3
 from pprint import pprint
 
 
+#TODO passar para formato notebook e fazer simulações
+# colocar um print do que foi a escolha cada vez
+
+
 #conecta no banco e cria a tabela users
 def db_creation():
     #conectar no banco
@@ -100,10 +104,6 @@ def db_select_all():
 
 if __name__ == '__main__':
 
-    #TODO adicionar opção de criar ou dropar o db
-    #db_creation()
-    #db_drop
-
     option=True
 
 while option:
@@ -115,7 +115,9 @@ while option:
     3. Remover Contato
     4. Alterar Contato
     5. Gerar Relatório
-    6. Sair
+    6. Criar Tabela no SQLite
+    7. Excluir Tabela no SQLite
+    8. Sair
     """)
     option=input("Escolha uma opção do Menu: ")
 
@@ -148,25 +150,32 @@ while option:
         print("\n")
 
     elif option=="3":
-        nome=input("Qual nome deseja remover? ")
+        nome=input("\n Qual nome deseja remover? \n")
         db_delete(nome)
         print("\n",nome,"removido(a) da agenda com sucesso\n") 
 
     elif option=="4":
-        nome= input("Qual usuário deseja alterar? ")
-        mail=input("Qual o novo email? ")
+        nome= input("\nQual usuário deseja alterar?\n ")
+        mail=input("\nQual o novo email?\n ")
         db_update(nome,mail)
         print("\n Contato Alterado\n") 
 
     elif option=="5":
         report=db_select_all()
-        print("\n Relatório Gerado:")
+        print("\n Relatório Gerado:\n")
         print ("{:<5} {:<8} {:<10} {:<14} {:<8} {:<8}".format('ID','Nome','Telefone','E-mail','Twitter','Instagram'))
         pprint(report)
         print("\n")
-        
-
+    
     elif option=="6":
+        report=db_creation()
+        print("\n Tabela criada \n")
+
+    elif option=="7":
+        report=db_drop()
+        print("\n Tabela exluida \n")
+
+    elif option=="8":
         print("\n Até Logo \n")
         break 
 
